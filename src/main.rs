@@ -2,27 +2,22 @@ use std::env::{self};
 
 use rand::random;
 
-const CONSONANT: char = 'c';
-const VOWEL: char = 'v';
-
 fn main() {
     let args: Vec<String> = env::args().collect();
 
     if args.len() >= 2 {
-        let first_arg = args[1].clone();
-        if first_arg == "-h" {
-            println!("Usage: cargo run -- <format_string>\n\t[c] - Consonant\n\t[v] - Vowel");
+        // print help information
+        if args[1] == "-h"
+            || args[1] == "--help"
+            || (!args[1].contains("c") && !args[1].contains("v"))
+        {
+            println!("Usage: cargo run -- <format_string>\nOR (for a binary build of the program)\nrandom_name <format_string>\n\nHow to format:\n\t[c] - A 'c' in the format string represents a consonant to be in this position.\n\t[v] - A 'v' in the format string represents a vowel to be in this position.\nNote: inputting no string will result in the default string \"ccvccvc\" being used.");
             std::process::exit(1);
         }
     }
 
+    // default string for random generation in case the user did not input one in.
     let default_str = String::from("ccvccvc");
-
-    let consonants = [
-        'b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'q', 'r', 's', 't', 'v', 'w',
-        'x', 'y', 'z',
-    ];
-    let vowels = ['a', 'e', 'i', 'o', 'u'];
 
     let the_string = {
         if args.len() >= 2 {
@@ -32,17 +27,38 @@ fn main() {
         }
     };
 
-    println!("{}", generate_random_str(&the_string, &consonants, &vowels));
+    let generated_string = generate_name_string(&the_string);
+    // only print if a string was actually generated
+    if !generated_string.is_empty() {
+        println!("{}", generated_string);
+    }
 }
 
-fn generate_random_str(input_string: &String, consonants: &[char], vowels: &[char]) -> String {
+/// Creates a new random string based on the input string.
+///
+/// # Params
+/// `input_string` - The input string to base the randomized string on. `c` represents a consonant and `v` represents a vowel.
+///
+/// # Returns
+/// - A `String` containing the randomized name string.
+fn generate_name_string(input_string: &String) -> String {
+    // define static variables for this function
+    static CONSONANT: char = 'c';
+    static VOWEL: char = 'v';
+    static CONSONANTS: &[char] = &[
+        'b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'q', 'r', 's', 't', 'v', 'w',
+        'x', 'y', 'z',
+    ];
+    static VOWELS: &[char] = &['a', 'e', 'i', 'o', 'u'];
+
+    // create new string
     let mut output = String::new();
     for char in input_string.chars() {
         if char == CONSONANT {
-            let rand_char = consonants[random::<usize>() % consonants.len()];
+            let rand_char = CONSONANTS[random::<usize>() % CONSONANTS.len()];
             output.push(rand_char);
         } else if char == VOWEL {
-            let rand_char = vowels[random::<usize>() % vowels.len()];
+            let rand_char = VOWELS[random::<usize>() % VOWELS.len()];
             output.push(rand_char);
         }
     }
