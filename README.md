@@ -12,5 +12,5 @@ cargo run
 
 ```sh
 # generating a random name with 2 consonants, a vowel, and one consonant
-cargo run -- ccvc
+cargo run -- cvcv
 ```

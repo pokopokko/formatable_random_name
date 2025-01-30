@@ -17,7 +17,7 @@ fn main() {
     }
 
     // default string for random generation in case the user did not input one in.
-    let default_str = String::from("ccvccvc");
+    let default_str = String::from("cvcvc");
 
     let the_string = {
         if args.len() >= 2 {
