@@ -42,7 +42,9 @@ fn main() {
 
             for ch in fixed_letters.chars() {
                 if ch.is_alphabetic() {
-                    final_string.push(ch);
+                    if let Some(gen_ch) = gen_chars.next() {
+                        final_string.push(ch);
+                    }
                 } else if ch == ' ' {
                     final_string.push(' ');
                     if let Some(gen_ch) = gen_chars.next() {
